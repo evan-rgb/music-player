@@ -31,6 +31,7 @@
             android:src="@drawable/player_next_n"/>
     </LinearLayout>
     <ListView
+        android:id="@+id/music_list"
         android:layout_above="@id/control_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

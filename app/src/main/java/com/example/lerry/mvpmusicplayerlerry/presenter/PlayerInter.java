@@ -5,8 +5,12 @@ package com.example.lerry.mvpmusicplayerlerry.presenter;
  */
 
 public interface PlayerInter {
-    public void  pause();
-    public void  prev();
+    public void play(int posi);
+    public void pause();
+
+    public void prev();
+
     public void next();
+
     public void seekTo();
 }
