@@ -29,6 +29,9 @@ public class MusicPlayer {
         musicModelList = MusicCursorUtil.getMusicList(ctx);
         Toast.makeText(ctx,musicModelList.size()+"",Toast.LENGTH_SHORT).show();
     }
+    public List<MusicModel> getMusicModelList(){
+        return  musicModelList;
+    }
     public MusicModel getMusic(int position){
         return musicModelList.get(position);
     }

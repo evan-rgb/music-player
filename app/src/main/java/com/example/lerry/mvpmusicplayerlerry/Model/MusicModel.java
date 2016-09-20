@@ -9,4 +9,10 @@ public class MusicModel {
     public String name;
     public String artist;
     public String album;
+
+    @Override
+    public String toString() {
+        return name + "\n"
+                + artist + "    " + album;
+    }
 }
