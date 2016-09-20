@@ -32,10 +32,43 @@
             android:layout_marginLeft="30dp"
             android:src="@drawable/player_next_n"/>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/music_seekbar_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/control_lay">
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/music_seekbar"
+            android:progress="50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:id="@+id/timeleft_txt"
+            android:layout_below="@id/music_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="#ffffff"
+            android:layout_alignParentRight="true"
+            android:text="dsf"/>
+        <TextView
+            android:id="@+id/title_txt"
+            android:layout_below="@id/music_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxEms="20"
+            android:textColor="#ffffff"
+            android:layout_alignParentLeft="true"
+            android:text="dsf"/>
+    </RelativeLayout>
     <ListView
         android:id="@+id/music_list"
-        android:layout_above="@id/control_lay"
+        android:layout_above="@id/music_seekbar_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="20dp"/>
 </RelativeLayout>

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by ro_ on 2016/9/19.
  */
 
-public class PlayerPresenter implements PlayerInter {
+public class PlayerPresenter implements PlayerInter ,MusicPlayer.SeekBarCallback {
     private PlayerView mPlayerView;
     private MusicPlayer mPlayer;
     private Context ctx;
@@ -24,6 +24,7 @@ public class PlayerPresenter implements PlayerInter {
         this.ctx = ctx;
         mPlayer = new MusicPlayer();
         mPlayer.initData(ctx);
+        mPlayer.setmSeekCallback(this);
     }
 
     @Override
@@ -67,7 +68,18 @@ public class PlayerPresenter implements PlayerInter {
     }
 
     @Override
-    public void seekTo() {
+    public void seekTo(int progress) {
+        mPlayer.seekTo(progress);
 
+    }
+
+    @Override
+    public void onSeek(int now, int total) {
+        mPlayerView.initProgress(now,total);
+    }
+
+    @Override
+    public void onDetail(MusicModel md) {
+        mPlayerView.initDetail(md);
     }
 }

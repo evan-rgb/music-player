@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import com.example.lerry.mvpmusicplayerlerry.Model.MusicModel;
 
@@ -17,9 +18,18 @@ import java.util.List;
 public class MusicCursorUtil {
     public static List<MusicModel> getMusicList(Context ctx) {
         List<MusicModel> musicModelList = new ArrayList<>();
-        ContentResolver musicResolver = ctx.getContentResolver();
-        Cursor cursor = musicResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                null, null, null, null);
+        ContentResolver musicResolver = null;
+        Cursor cursor = null;
+        try {
+            musicResolver = ctx.getContentResolver();
+            cursor = musicResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    null, null, null, null);
+        } catch (RuntimeException e) {
+            if(e instanceof  SecurityException){
+                Toast.makeText(ctx,"请打开文件读写权限",Toast.LENGTH_SHORT).show();
+            }
+            return musicModelList;
+        }
         if (cursor == null || !cursor.moveToFirst()) {
             return musicModelList;
         }

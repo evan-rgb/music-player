@@ -17,5 +17,5 @@ public interface PlayerInter {
 
     public void next();
 
-    public void seekTo();
+    public void seekTo(int progress);
 }

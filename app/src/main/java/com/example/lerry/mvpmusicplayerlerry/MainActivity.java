@@ -2,13 +2,17 @@ package com.example.lerry.mvpmusicplayerlerry;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lerry.mvpmusicplayerlerry.Model.MusicModel;
+import com.example.lerry.mvpmusicplayerlerry.Utils.DateUtils;
 import com.example.lerry.mvpmusicplayerlerry.View.PlayerView;
 import com.example.lerry.mvpmusicplayerlerry.presenter.PlayerInter;
 import com.example.lerry.mvpmusicplayerlerry.presenter.PlayerPresenter;
@@ -28,6 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView inNext;
     @Bind(R.id.music_list)
     ListView mMusicList;
+    @Bind(R.id.music_seekbar)
+    AppCompatSeekBar mSeekBar;
+    @Bind(R.id.timeleft_txt)
+    TextView timeLeftTx;
+    @Bind(R.id.title_txt)
+    TextView titleTx;
     private PlayerInter mPlayerInter;
     private ArrayAdapter<MusicModel> mAdapter;
 
@@ -42,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-       // String content[] = {"1", "2", "3"};
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mPlayerInter.getMusicList());
         mMusicList.setAdapter(mAdapter);
+        mSeekBar.setOnSeekBarChangeListener(new SeekBarListener());
     }
 
     @Override
@@ -72,10 +82,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void mOnItemClick(int position) {
         mPlayerInter.play(position);
     }
-
+    @Override
+    public void initProgress(int now , int total) {
+        mSeekBar.setProgress(now*100/total);
+        timeLeftTx.setText(DateUtils.secToMin(total-now));
+    }
 
     @Override
-    public void initProgress() {
+    public void initDetail(MusicModel md) {
+        titleTx.setText(md.name);
+    }
 
+    class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
+        int progress = 0;
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            this.progress = progress;
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mPlayerInter.seekTo(progress);
+        }
     }
 }

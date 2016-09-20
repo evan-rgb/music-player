@@ -21,9 +21,11 @@ public class MusicPlayer {
     private MediaPlayer mPlayer;
     private final int MSG_INITPROGRESS = 0x0;
     private List<MusicModel>  musicModelList;
+    private SeekBarCallback mSeekCallback;
     public MusicPlayer(){
         this.mPlayer = new MediaPlayer();
         musicModelList = new ArrayList<>();
+        mHandler.sendEmptyMessage(MSG_INITPROGRESS);
     }
     public void initData(Context ctx){
         musicModelList = MusicCursorUtil.getMusicList(ctx);
@@ -37,6 +39,7 @@ public class MusicPlayer {
     }
     public void initPlay(int position){
         try {
+            mSeekCallback.onDetail(getMusic(position));
             mPlayer.reset();
             mPlayer.setDataSource(getMusic(position).path);
             mPlayer.prepare();
@@ -50,8 +53,11 @@ public class MusicPlayer {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case MSG_INITPROGRESS:
-                    mPlayer.getCurrentPosition();
-                    mPlayer.getDuration();
+                    int now = mPlayer.getCurrentPosition();
+                    int total = mPlayer.getDuration();
+                    if (mSeekCallback != null && total != 0) {
+                        mSeekCallback.onSeek(now,total);
+                    }
                     removeMessages(MSG_INITPROGRESS);
                     sendEmptyMessageDelayed(MSG_INITPROGRESS,1000);
                     break;
@@ -60,8 +66,13 @@ public class MusicPlayer {
             }
         }
     };
-    public void seekTo(int msec){
-        mPlayer.seekTo(msec);
+    public void setmSeekCallback(SeekBarCallback cbk){
+        mSeekCallback = cbk;
+    }
+
+    public void seekTo(int progress) {
+        int position = progress * mPlayer.getDuration() / 100;
+        mPlayer.seekTo(position);
     }
     public void stop(){
         mPlayer.stop();
@@ -72,5 +83,9 @@ public class MusicPlayer {
     }
     public void start(){
         mPlayer.start();
+    }
+    public static interface  SeekBarCallback{
+        void onSeek(int now, int total);
+        void onDetail(MusicModel md);
     }
 }
